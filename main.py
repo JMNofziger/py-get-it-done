@@ -40,8 +40,6 @@ class Task(db.Model):
     def __init__(self, name):
         self.name = name
 
-tasks = []
-
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
