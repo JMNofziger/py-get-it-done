@@ -49,11 +49,24 @@ def index():
         new_task = Task(task_name)
         # Add new task object to db session
         db.session.add(new_task)
+        # Push db session tasks to database
         db.session.commit()
 
     # populate variable with database entries
     tasks = Task.query.all()
     return render_template('todos.html',title="Get It Done!", tasks=tasks)
+
+@app.route('/delete-task', methods=['POST'])
+def delete_task():
+    # Remove indicated task id from database
+    task_id = int(request.form['task-id'])
+    # query.get method calls a specific db entry by query
+    task = Task.query.get(task_id)
+    # delete the object returned from db query --> used task.id to grab object
+    db.session.delete(task)
+    db.session.commit()
+
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run()
