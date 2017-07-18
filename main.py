@@ -49,6 +49,8 @@ def index():
         task = request.form['task']
         tasks.append(task)
 
+    # populate variable with database entries
+    tasks = Task.query.all()
     return render_template('todos.html',title="Get It Done!", tasks=tasks)
 
 if __name__ == '__main__':
