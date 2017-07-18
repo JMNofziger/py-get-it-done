@@ -44,8 +44,12 @@ class Task(db.Model):
 def index():
 
     if request.method == 'POST':
-        task = request.form['task']
-        tasks.append(task)
+        task_name = request.form['task']
+        # Create Task object with constructor
+        new_task = Task(task_name)
+        # Add new task object to db session
+        db.session.add(new_task)
+        db.session.commit()
 
     # populate variable with database entries
     tasks = Task.query.all()
