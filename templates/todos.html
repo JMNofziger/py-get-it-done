@@ -13,7 +13,15 @@
     <hr />
 
     {% if tasks|length == 0 %}
-    <p>No tasks yet</p>
+    <p>No tasks on your list to complete</p>
+    <hr>
+    <h2>Completed</h2>
+    <ul>
+      {% for task in completed_tasks %}
+      <li>{{task.name}}</li>
+      {% endfor %}
+    </ul>
+    
     {% else %}
 
         <ul>
@@ -27,6 +35,15 @@
             </li>
             {% endfor %}
         </ul>
+
+        <hr>
+        <h2>Completed</h2>
+        <ul>
+          {% for task in completed_tasks %}
+          <li>{{task.name}}</li>
+          {% endfor %}
+        </ul>
+
 
     {% endif %}
 {% endblock %}
