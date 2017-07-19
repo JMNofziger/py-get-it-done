@@ -35,10 +35,13 @@ class Task(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     # column within table that represents Task -- datatype is string with max length 120 char
     name=db.Column(db.String(120))
+    completed = db.Column(db.Boolean)
 
     # provide a contstructor for Task object -- take user specified and assign to column
     def __init__(self, name):
         self.name = name
+        # Another option could be to set a default of false in the declaration
+        self.completed = False
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
