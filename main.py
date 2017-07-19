@@ -66,7 +66,8 @@ def delete_task():
     # query.get method calls a specific db entry by query
     task = Task.query.get(task_id)
     # delete the object returned from db query --> used task.id to grab object
-    db.session.delete(task)
+    task.completed=True 
+    db.session.add(task)
     db.session.commit()
 
     return redirect('/')
