@@ -43,6 +43,16 @@ class Task(db.Model):
         # Another option could be to set a default of false in the declaration
         self.completed = False
 
+class User(db.Model):
+    #primary key id
+    id=db.Column(db.Integer, primary_key=True)
+    email=db.Column(db.String(120), unique=True)
+    password=db.Column(db.String(30))
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password= password
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
