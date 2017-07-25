@@ -25,6 +25,8 @@ db = SQLAlchemy(app)
 # Create persistent class to represent app specific data to store in DB
 # Class will represent tasks for our list
 
+app.secret_key='salmonsalmonsalmon'
+
 # specifies that class extends db.Model class; db is the object created from SQLAlchemy
 # db object has a class inside of it called Model; 
 # this will inherit basic functionality that allows "Task" objects to be translated to relation setting
@@ -55,6 +57,13 @@ class User(db.Model):
 
 @app.before_request
 def require_login():
+    # list of routes that users don't need to be logged in to see
+    allowed_routes =['login', 'register']
+    # if the page that user is req not in allowed_routes list AND 
+    # if there is no key called 'email' in the session object dictionary
+    if request.endpoint not in allowed_routes and 'email' not in session:
+        # this forces the user to login
+        return redirect('/login')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -98,8 +107,9 @@ def login():
         
         if user and user.password == form_password:
             #session is an obj that you can use to store data, associated with specific user from one request to another; allows server to remember data associated with that user
+            success="Successfully logged in"
             session['email']=user_email
-            return redirect('/')
+            return render_template('todos.html', success=success)
         else:
             return render_template('login.html', email=user_email)
 
