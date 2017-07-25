@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 import configparser 
 
@@ -53,6 +53,10 @@ class User(db.Model):
         self.email = email
         self.password= password
 
+@app.before_request
+def require_login():
+
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
@@ -93,6 +97,8 @@ def login():
         user = User.query.filter_by(email=user_email).first()
         
         if user and user.password == form_password:
+            #session is an obj that you can use to store data, associated with specific user from one request to another; allows server to remember data associated with that user
+            session['email']=user_email
             return redirect('/')
         else:
             return render_template('login.html', email=user_email)
@@ -118,6 +124,8 @@ def register():
                 new_user=User(user_email, user_pwd)
                 db.session.add(new_user)
                 db.session.commit()
+                session['email']=user_email
+                return redirect('/')
             else:
                 pwd_error = "Passwords must match"
                 return render_template('register.html', pwd_error=pwd_error, email=user_email)
@@ -126,6 +134,12 @@ def register():
             return render_template('register.html', user_error=error,email=user_email)
 
     return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    # removes email from session to signal logout
+    del session['email']
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run()
