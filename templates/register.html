@@ -22,7 +22,9 @@
       <input type="password" id="verify" name="verify">
     </label><span class="vperror">{{vpwd_error}}</span>
     </p>
-    <h3>{{match_error}}</h3>
+    <span class="incomplete-error">{{incomplete_error}}</span>
+    <span class="user-error">{{user_error}}</span>
+    <br>
     <button type="submit">Complete Sign Up</button>
   </form>
   {% endblock %}
