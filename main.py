@@ -111,7 +111,7 @@ def register():
         
         if user_email == "" or user_pwd == "":
             incomplete_error = "All fields must be completed"
-            return render_template("register.html", incomplete_error=incomplete_error)
+            return render_template("register.html", incomplete_error=incomplete_error,email=user_email)
 
         if check_existing == None: 
             if user_pwd == user_vpwd:
@@ -120,10 +120,10 @@ def register():
                 db.session.commit()
             else:
                 pwd_error = "Passwords must match"
-                return render_template('register.html', pwd_error=pwd_error)
+                return render_template('register.html', pwd_error=pwd_error, email=user_email)
         else:
             error = "A user with that email already exists" 
-            return render_template('register.html', user_error=error)
+            return render_template('register.html', user_error=error,email=user_email)
 
     return render_template('register.html')
 
