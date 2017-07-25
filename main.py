@@ -83,12 +83,48 @@ def delete_task():
 
     return redirect('/')
 
-@app.route('/login')
+@app.route('/login', methods=['GET','POST'])
 def login():
+
+    if request.method == 'POST':
+        user_email=request.form['email']
+        form_password=request.form['password']
+       
+        user = User.query.filter_by(email=user_email).first()
+        
+        if user and user.password == form_password:
+            return redirect('/')
+        else:
+            return render_template('login.html', email=user_email)
+
     return render_template('login.html')
 
-@app.route('/register')
+@app.route('/register' , methods=['GET','POST'])
 def register():
+
+    if request.method == 'POST':
+        user_email = request.form['email']
+        user_pwd = request.form['password']
+        user_vpwd = request.form['verify']
+        
+        check_existing = User.query.filter_by(email=user_email).first()
+        
+        if user_email == "" or user_pwd == "":
+            incomplete_error = "All fields must be completed"
+            return render_template("register.html", incomplete_error=incomplete_error)
+
+        if check_existing == None: 
+            if user_pwd == user_vpwd:
+                new_user=User(user_email, user_pwd)
+                db.session.add(new_user)
+                db.session.commit()
+            else:
+                pwd_error = "Passwords must match"
+                return render_template('register.html', pwd_error=pwd_error)
+        else:
+            error = "A user with that email already exists" 
+            return render_template('register.html', user_error=error)
+
     return render_template('register.html')
 
 if __name__ == '__main__':
