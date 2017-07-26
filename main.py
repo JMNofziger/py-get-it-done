@@ -61,6 +61,7 @@ def require_login():
     allowed_routes =['login', 'register']
     # if the page that user is req not in allowed_routes list AND 
     # if there is no key called 'email' in the session object dictionary
+    # request.endpoint is the representation of the incoming http request with endpoint designating the requested path
     if request.endpoint not in allowed_routes and 'email' not in session:
         # this forces the user to login
         return redirect('/login')
