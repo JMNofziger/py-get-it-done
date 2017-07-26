@@ -38,18 +38,24 @@ class Task(db.Model):
     # column within table that represents Task -- datatype is string with max length 120 char
     name=db.Column(db.String(120))
     completed = db.Column(db.Boolean)
+    # column within task table that links to users in User table based off the user table id prop
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     # provide a contstructor for Task object -- take user specified and assign to column
-    def __init__(self, name):
+    def __init__(self, name, owner):
         self.name = name
         # Another option could be to set a default of false in the declaration
         self.completed = False
+        self.owner = owner
 
 class User(db.Model):
     #primary key id
     id=db.Column(db.Integer, primary_key=True)
     email=db.Column(db.String(120), unique=True)
     password=db.Column(db.String(30))
+    # shows relationship between user and task objects; 
+    # populate task list with things from class Task such that owner property is equal to specific user in consideration 
+    tasks = db.relationship('Task', backref='owner')
 
     def __init__(self, email, password):
         self.email = email
