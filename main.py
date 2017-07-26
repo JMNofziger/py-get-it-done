@@ -112,10 +112,9 @@ def login():
             session['email']=user_email
             # flash function 
             flash("Logged in")
-            print(session)
             return redirect('/')
         else:
-            return render_template('login.html', email=user_email)
+            flash('User password incorrect, or user does not exist', 'error') 
 
     return render_template('login.html')
 
