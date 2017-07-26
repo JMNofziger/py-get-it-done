@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session
+from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
 import configparser 
 
@@ -110,7 +110,10 @@ def login():
             #session is an obj that you can use to store data, associated with specific user from one request to another; allows server to remember data associated with that user
             success="Successfully logged in"
             session['email']=user_email
-            return render_template('todos.html', success=success)
+            # flash function 
+            flash("Logged in")
+            print(session)
+            return redirect('/')
         else:
             return render_template('login.html', email=user_email)
 
