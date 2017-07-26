@@ -76,18 +76,22 @@ def require_login():
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
+    # uses user email from session object to query user table and get owner object
+    owner = User.query.filter_by(email=session['email']).first()
+    
     if request.method == 'POST':
         task_name = request.form['task']
         # Create Task object with constructor
-        new_task = Task(task_name)
+        new_task = Task(task_name, owner)
         # Add new task object to db session
         db.session.add(new_task)
         # Push db session tasks to database
         db.session.commit()
 
-    # populate variable with database entries
-    tasks = Task.query.filter_by(completed=False).all()
-    completed_tasks = Task.query.filter_by(completed=True).all()
+    # populate variable with database entries that belong to owner
+    tasks = Task.query.filter_by(completed=False,owner=owner).all()
+    # owner of given task should be owner as described in this context -- the query above
+    completed_tasks = Task.query.filter_by(completed=True,owner=owner).all()
     return render_template('todos.html',title="Get It Done!", tasks=tasks, completed_tasks=completed_tasks)
 
 @app.route('/delete-task', methods=['POST'])
